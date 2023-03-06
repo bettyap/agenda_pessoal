@@ -3,11 +3,10 @@
     <input 
       class="search_input"
       type="text" 
-      name="consulta" 
-      id="q" 
       placeholder="Buscar"
+      @input="onInput"
     />
-    <button class="search_btn">
+    <button class="search_btn" @click="$emit('click')">
       <ph-magnifying-glass :size="32" color="#6da1d2" />
     </button>
   </div>
@@ -18,6 +17,11 @@
 export default {
   components: {
     PhMagnifyingGlass,
+  },
+  methods: {
+    onInput(event) {
+      this.$emit('input', event.target.value)
+    }
   }
 }
 </script>
@@ -37,7 +41,7 @@ export default {
   }
   .search_btn {
     border: none;
-    background: white;
+    background: var(--white);
     cursor: pointer;
   }
 </style>

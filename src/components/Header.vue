@@ -1,8 +1,7 @@
 <template>
   <header class="header-container">
     <div class="header-content">
-      <p>ELISABETH APARECIDA</p>
-      <ph-user :size="40" color="white"/>
+      <p>{{ nome }}</p>
     </div>
   </header>
 </template>
@@ -12,6 +11,16 @@
 export default {
   components: {
     PhUser
+  },
+  data () {
+    return {
+      nome: ''
+    }
+  },
+  created () {
+    let userInfo = localStorage.getItem("user")
+    userInfo = JSON.parse(userInfo)
+    this.nome = userInfo.nome
   }
 }
 </script>
@@ -22,14 +31,14 @@ export default {
     height: 5.375rem;
     padding: 1.7rem 6rem;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    background: #6da1d2;
+    background: var(--blue-500);
   }
   .header-content {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: white;
+    color: var(--white);
   }
 
   @media (max-width: 500px){
