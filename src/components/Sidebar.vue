@@ -17,31 +17,14 @@
         :opened="isOpen"
         icon="ph-user"
         title="MEU CADASTRO"
-        to="/consult"
-      />
-      <SidebarItem
-        :opened="isOpen"
-        icon="ph-users" 
-        title="USUÁRIOS"
-        to="/consult"
-      />
-      <SidebarItem 
-        :opened="isOpen"
-        icon="ph-users-three" 
-        title="PESSOAS"
-        to="/consult"
-      />
-      <SidebarItem
-        :opened="isOpen"
-        icon="ph-globe-simple"
-        title="CONTATOS"
-        to="/consult"
+        to="/meu-cadastro"
       />
       <SidebarItem
         :opened="isOpen"
         icon="ph-sign-out"
-        title="LOGOUT"
-        to="/SAIR"
+        title="SAIR"
+        is-button
+        @click="handleLogout"
       />
     </ul>
     
@@ -51,6 +34,8 @@
 <script>
   import { PhCaretDoubleRight, PhCaretDoubleLeft } from "phosphor-vue";
   import SidebarItem from './SidebarItem.vue'
+
+  window.localStorage.getItem("token");
 
   export default {
     components: { 
@@ -66,6 +51,11 @@
     methods: {
       toggleMenu() {
         this.isOpen = !this.isOpen
+      },
+      handleLogout(){
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        this.$router.push('/login');
       }
     }
   }
@@ -78,7 +68,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #6da1d2;
+    background: var(--blue-500);
     box-shadow: 0px 0px 4px rgb(0 0 0 / 25%);
     overflow: hidden;
   }

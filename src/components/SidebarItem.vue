@@ -1,9 +1,18 @@
 <template>
-  <li class="sidebar-menu-item">
-    <router-link :to="to" class="sidebar-item-link">
-      <component :is="icon" :size="32" color="white"></component>
-      <span v-if="opened">{{title}}</span>
-    </router-link>
+  <li class="sidebar-menu-item" :title="opened ? '' : title">
+    <template v-if="isButton">
+      <button @click="$emit('click')" class="sidebar-item-link">
+        <component :is="icon" :size="32" color="white"></component>
+        <span v-if="opened">{{title}}</span>
+      </button>
+    </template>
+    <template v-else>
+      <router-link :to="to" class="sidebar-item-link">
+        <component :is="icon" :size="32" color="white"></component>
+        <span v-if="opened">{{title}}</span>
+      </router-link>
+    </template>
+
   </li>
 </template>
 
@@ -23,7 +32,8 @@ export default {
     opened: Boolean, 
     icon: String,
     title: String,
-    to: String
+    to: String,
+    isButton: Boolean,
   }
 }
 </script>
@@ -51,13 +61,16 @@ export default {
     padding: 12px 24px;
     font-size: 16px;
     line-height: 21px;
-    color: white;
+    color: var(--white);
     transition: background-color .3s ease-out, box-shadow .3s ease-out;
     text-decoration: none;
     gap: 2rem;
+    border: none;
+    background: transparent;
+    font-weight: bold;
   }
   .sidebar-menu-item:hover {
-    background: #98bfdc;
+    background: var(--blue-300);
     box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.25);
   }
 
