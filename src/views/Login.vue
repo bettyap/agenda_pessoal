@@ -14,7 +14,6 @@
         <Button 
           title="Entrar"
           type="submit"
-          @click="login"
         />
       </form>
     </div>
@@ -22,6 +21,7 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
 import Button from '../components/Button.vue'
 import api from '../services/api.js'
 export default {
@@ -52,8 +52,10 @@ export default {
           }
         })
 
-      }).catch(error => {
-        console.error(error)
+      }).catch((_error) => {
+        toast.error("Algo deu errado!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }) 
     }
   }
