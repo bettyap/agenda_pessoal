@@ -2,24 +2,61 @@
   <div class="container">
     <div class="content">
       <h1 class="title">Agenda Pessoal</h1>
-      <form class="form">
+      <form class="form" @submit="login">
         <label class="form_label">Email:</label>
-        <input class="form_input" v-model="message" placeholder="jhonny@example.com" />
+        <input class="form_input" v-model="username" placeholder="jhonny@example.com" />
         <label class="form_label">Senha:</label>
         <input class="form_input" type="password" v-model="password" placeholder="*****" />
         <div class="form_remember">
           <input type="checkbox" name="teste" id="teste">
           <label for="teste">Lembrar de mim</label>
         </div>
-        <button class="form_button">Entrar</button>
+        <Button 
+          title="Entrar"
+          type="submit"
+          @click="login"
+        />
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import Button from '../components/Button.vue'
+import api from '../services/api.js'
 export default {
+  components: { Button },
+  data() {
+    return {
+      username: this.username,
+      password: this.password,
+    }
+  },
+  methods: {
+    login(event) {
+      event.preventDefault()
 
+      api.post('/auth/login', {
+        username: this.username,
+        password: this.password
+      }).then(response => {
+        const data = response.data
+
+        localStorage.setItem("token", data.accessToken);
+        api.defaults.headers.common['Authorization'] = "Bearer " + data.accessToken;
+
+        api.get('/usuario/buscar/' + data.id).then(userResponse => {
+          if (userResponse.status == 200) {
+            localStorage.setItem("user", JSON.stringify(userResponse.data.object.usuario))
+            this.$router.push('/')
+          }
+        })
+
+      }).catch(error => {
+        console.error(error)
+      }) 
+    }
+  }
 }
 </script>
 
@@ -31,13 +68,13 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #6da1d2;
+    background: var(--blue-500);
   }
   .content {
-    background: #98bfdc;
+    background: var(--blue-300);
     padding: 2rem;
     width: 25.25rem;;
-    background: white;
+    background: var(--white);
     box-shadow: 0 10px 20px rgb(162 162 162 / 19%), 0 6px 6px rgb(98 98 98 / 23%);
   }
   .title {
@@ -62,6 +99,7 @@ export default {
     display: flex;
     gap: 0.75rem;
     cursor: pointer;
+    margin-bottom: 1rem;
   }
   .form_remember input {
     width: 1rem;
@@ -70,17 +108,4 @@ export default {
   .form_remember label {
     cursor: pointer;
   }
-  .form_button {
-    background: lightblue;
-    border: 0;
-    padding: 1rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid #6da1d2;
-  }
-  .form_button:hover {
-    background: #6da1d2;
-  }
-  
 </style>
