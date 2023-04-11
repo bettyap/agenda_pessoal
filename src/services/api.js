@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://demometaway.vps-kinghost.net:8485/api',
+  baseURL: 'https://demometaway.vps-kinghost.net:8487/api',
 });
 
 const token = localStorage.getItem("token")
