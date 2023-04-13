@@ -1,9 +1,12 @@
 <template>
   <Transition name="modal">
-    <div v-if="show" class="modal-mask">
-      <div class="modal-container">
+    <div v-if="show" class="modal-mask" @click="$emit('close')">
+      <div class="modal-container" @click.stop="('close')">
         <div class="modal-header">
           <slot name="header"></slot>
+          <button @click="$emit('close')" class="close-icon">
+            <ph-x :size="24" weight="bold"/>
+          </button>
         </div>
 
         <div class="modal-body">
@@ -19,7 +22,10 @@
 </template>
 
 <script>
+import { PhX } from "phosphor-vue"
+import Button from './Button.vue'
 export default {
+  components: { Button, PhX },
   props: {
     show: Boolean
   }
@@ -49,6 +55,24 @@ export default {
     border-radius: 2px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+  }
+  .close-icon {
+    display: flex;
+    cursor: pointer;
+    color: var(--blue-500);
+    border: none;
+    background: transparent;
+  }
+  .close-icon svg {
+    transition: transform .1s ease;
+  }
+  .close-icon svg:hover {
+    color: var(--blue-300);
+    transform: translateY(-3px);
   }
   .modal-body {
     margin: 20px 0;
