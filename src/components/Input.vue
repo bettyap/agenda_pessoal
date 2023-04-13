@@ -9,18 +9,25 @@
     :modelValue="modelValue" 
     @input="onInput"
   >
+  <span v-if="errors.length" class="form-error">{{errors[0].$message}}</span>
 </template>
 
-<script>
+<script> 
 export default {
   props: {
     label: String,
     type: String,
+    errors: {
+      type: Array,
+      default() {
+        return []
+      }
+    },
     dataMaska: String,
     modelValue: {
       type: String,
       default: ''
-    }
+    },
   },
   methods: {
     onInput(event) {
@@ -35,12 +42,16 @@ export default {
     margin-bottom: 0.25rem;
     font-size: 1rem;
     display: flex;
-    flex-direction: column;
   }
   .form_input {
     width: 100%;
     padding: 0.5rem;
-    margin-bottom: 1rem;
     font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .form-error {
+    font-size: 0.75rem;
+    color: red;
+    margin: 0rem 0rem 0.5rem;
   }
 </style>
