@@ -31,6 +31,22 @@
             
           </div>
         </div>
+        <button id="show-modal" @click="showModal = true">Adicionar</button>
+
+        <Teleport to="body">
+          <Modal :show="showModal" @close="showModal = false">
+            <template #header>
+              <h3>Cadastrar Pessoa</h3>
+            </template>
+            <template #body>
+              <PersonForm @close="showModal = false">
+
+              </PersonForm>
+            </template>
+
+          </Modal>
+        </Teleport>
+
       </section>
     </main>
   </div>
@@ -42,15 +58,37 @@ import Sidebar from '../components/Sidebar.vue'
 import Search from '../components/Search.vue'
 import { PhHeart, PhPencil, PhTrash } from "phosphor-vue"
 import api from '../services/api.js'
+import Modal from '../components/Modal.vue'
+import Button from '../components/Button.vue'
+import Input from '../components/Input.vue'
+import PersonForm from '../components/PersonForm.vue'
 
 export default {
   data() {
     return {
       busca: '',
-      listaPessoas: []
+      listaPessoas: [],
+      showModal: false
     }
   },
-  components: { Sidebar, Header, Search, PhHeart, PhPencil, PhTrash },
+  props: {
+    label: String,
+    type: String,
+    dataMaska: String,
+    vModel: String
+  },
+  components: { 
+    Sidebar, 
+    Header, 
+    Search, 
+    PhHeart, 
+    PhPencil, 
+    PhTrash, 
+    Modal, 
+    Button, 
+    Input, 
+    PersonForm
+  },
   mounted () {
     this.infoUser()
   },
@@ -140,7 +178,6 @@ export default {
     display: flex;
     gap: 2rem;
   }
-
   @media(max-width: 880px){
     .main {
       flex-direction: column;
