@@ -1,20 +1,12 @@
 <template>
   <form class="form" @submit="onSubmit">
-    <Input 
-      label="Adicionar foto" 
-      type="file" 
-      ref="fileInput"
-    />
+    <label>Adicionar foto</label>
+    <input type="file" ref="fileInput" />
     <Input 
       label="Nome Completo *" 
       name="nome" 
-      v-model.trim="v$.nome.$model" 
+      v-model.trim="nome" 
       :errors="v$.nome.$errors"
-    />
-    <Input 
-      label="País *" 
-      v-model.trim="v$.endereco.pais.$model"
-      :errors="v$.endereco.pais.$errors"
     />
     <Input 
       label="CPF *" 
@@ -24,35 +16,45 @@
       :errors="v$.cpf.$errors"
     />
     <Input 
+      label="Data de Nascimento"
+      type="date"
+      max="9999-12-31"
+    />
+    <Input 
+      label="País *" 
+      v-model.trim="endereco.pais"
+      :errors="v$.endereco.pais.$errors"
+    />
+    <Input 
       label="CEP *" 
       dataMaska="#####-###" 
-      v-model.trim="v$.endereco.cep.$model"
+      v-model.trim="endereco.cep"
       :errors="v$.endereco.cep.$errors"
     />
     <Input 
       label="Cidade *" 
-      v-model.trim="v$.endereco.cidade.$model"
+      v-model.trim="endereco.cidade"
       :errors="v$.endereco.cidade.$errors"
     />
     <Input 
       label="Estado *" 
       v-model="endereco.estado" 
-      v-model.trim="v$.endereco.estado.$model" 
+      v-model.trim="endereco.estado" 
       :errors="v$.endereco.estado.$errors"
     />
     <Input 
       label="Endereço *" 
-      v-model.trim="v$.endereco.logradouro.$model" 
+      v-model.trim="endereco.logradouro" 
       :errors="v$.endereco.logradouro.$errors"
     />
     <Input 
       label="Número *" 
-      v-model.trim="v$.endereco.numero.$model" 
+      v-model.trim="endereco.numero" 
       :errors="v$.endereco.numero.$errors"
     />
     <Input 
       label="Bairro *" 
-      v-model.trim="v$.endereco.bairro.$model" 
+      v-model.trim="endereco.bairro" 
       :errors="v$.endereco.bairro.$errors"
     />
 
@@ -80,9 +82,11 @@ export default {
   },
   data() {
     return {
+      id: "",
       nome: "",
-      cpf: "", 
+      cpf: "",
       endereco: {
+        id: "",
         bairro: "",
         cep: "",
         cidade: "",
@@ -90,6 +94,14 @@ export default {
         logradouro: "",
         numero: "",
         pais: ""
+      }
+    }
+  },
+  props: {
+    person: {
+      type: Object,
+      default() {
+        return null
       }
     }
   },
@@ -109,6 +121,21 @@ export default {
     }
   },
   components: { Input, DynamicInput, Button },
+  mounted() {
+    if( this.person !== null ) {
+      this.id = this.person.id
+      this.nome = this.person.nome
+      this.cpf = this.person.cpf
+      this.endereco.id = this.person.endereco.id
+      this.endereco.cep = this.person.endereco.cep
+      this.endereco.bairro = this.person.endereco.bairro
+      this.endereco.cidade = this.person.endereco.cidade
+      this.endereco.estado = this.person.endereco.estado
+      this.endereco.logradouro = this.person.endereco.logradouro
+      this.endereco.numero = this.person.endereco.numero
+      this.endereco.pais = this.person.endereco.pais
+    }
+  },
   methods: {
     async onSubmit(event) {
       event.preventDefault()
@@ -120,18 +147,19 @@ export default {
 
       let pessoa = await this.criarCadastroPessoa()
       let upload = await this.onUpload(pessoa.data.object.id)
-      
+
+      this.$emit('completed')
     },
     async criarCadastroPessoa() {
       let response = null
 
       try {
         response = await api.post('/pessoa/salvar', {
-          id: 4,
+          id: this.id,
           nome: this.nome,
           cpf: this.cpf,
           endereco: {
-            id: 7,
+            id: this.endereco.id,
             bairro: this.endereco.bairro,
             cep:  this.endereco.cep,
             cidade: this.endereco.cidade,
@@ -149,9 +177,9 @@ export default {
 
     async onUpload(id) {
       const formData = new FormData();
-      console.log(this.$refs.fileInput.$refs.input)
-      formData.append('foto', this.$refs.fileInput.$refs.input.files[0]);
-      
+      console.log(this.$refs.fileInput)
+      formData.append('foto', this.$refs.fileInput.files[0]);
+
       let response = null
 
       try {
