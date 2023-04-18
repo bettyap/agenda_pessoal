@@ -1,13 +1,14 @@
 <template>
   <label class="form_label">{{label}}</label>
   <input 
-    class="form_input" 
-    :type="type" 
-    ref="input" 
-    v-maska 
-    :data-maska="dataMaska" 
-    :modelValue="modelValue" 
+    class="form_input"
+    :type="type"
+    ref="input"
+    v-maska
+    :data-maska="dataMaska"
+    :value="modelValue"
     @input="onInput"
+    :max="max"
   >
   <span v-if="errors.length" class="form-error">{{errors[0].$message}}</span>
 </template>
@@ -28,6 +29,7 @@ export default {
       type: String,
       default: ''
     },
+    max: String,
   },
   methods: {
     onInput(event) {
