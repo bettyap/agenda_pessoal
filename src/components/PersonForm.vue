@@ -1,7 +1,8 @@
 <template>
   <form class="form" @submit="onSubmit">
     <label>Adicionar foto</label>
-    <input type="file" ref="fileInput" />
+    <img v-if="preview" :src="preview" alt="Preview" class="foto-preview">
+    <input type="file" ref="fileInput" @change="previewImage"/>
     <Input 
       label="Nome Completo *" 
       name="nome" 
@@ -94,7 +95,8 @@ export default {
         logradouro: "",
         numero: "",
         pais: ""
-      }
+      },
+      preview: null,
     }
   },
   props: {
@@ -146,7 +148,10 @@ export default {
       }
 
       let pessoa = await this.criarCadastroPessoa()
-      let upload = await this.onUpload(pessoa.data.object.id)
+      
+      if(this.$refs.fileInput.files.length !== 0){
+        let upload = await this.onUpload(pessoa.data.object.id)
+      }
 
       this.$emit('completed')
     },
@@ -175,6 +180,18 @@ export default {
       return response 
     },
 
+    previewImage(event) {
+      const file = event.target.files[0];
+      if (file && file.type.includes('image/')) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.preview = reader.result;
+          this.file = file;
+        };
+      }
+    },
+
     async onUpload(id) {
       const formData = new FormData();
       console.log(this.$refs.fileInput)
@@ -200,5 +217,10 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 1rem 0;
+  }
+  .foto-preview {
+    width: 4rem;
+    height: 4rem;
+    margin: 0.5rem 0px;
   }
 </style>
