@@ -8,7 +8,7 @@
         <div class="container-table">
           <div v-for="pessoa in listaPessoas" :key="pessoa.id" class="card" >
             <template v-if="pessoa.foto">
-              <img class="avatar" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="">
+              <img class="avatar" :src="pessoa.foto" alt="">
             </template>
             <template v-else>
               <img class="avatar" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="">
@@ -25,13 +25,13 @@
             </div>
             <div class="icons">
               <ph-heart :size="24" />
-              <ph-pencil :size="24" />
+              <ph-pencil :size="24" @click="mostrarPerson(pessoa)" />
               <ph-trash :size="24" />
             </div>
             
           </div>
         </div>
-        <button id="show-modal" @click="showModal = true">Adicionar</button>
+        <button id="show-modal" @click="mostrarPerson(null)" >Adicionar</button>
 
         <Teleport to="body">
           <Modal :show="showModal" @close="showModal = false">
@@ -39,7 +39,7 @@
               <h3>Cadastrar Pessoa</h3>
             </template>
             <template #body>
-              <PersonForm @close="showModal = false">
+              <PersonForm :person="currentPerson" @completed="onCompleted">
 
               </PersonForm>
             </template>
@@ -68,7 +68,8 @@ export default {
     return {
       busca: '',
       listaPessoas: [],
-      showModal: false
+      showModal: false, 
+      currentPerson: null,
     }
   },
   props: {
@@ -96,17 +97,41 @@ export default {
     onSearchInput (value) {
       this.busca = value
     },
-    infoUser(){
-      api.post('/pessoa/pesquisar', {
-        nome: this.busca
-      }).then(response => {
+    async infoUser(){
+      try {
+        let response = await api.post('/pessoa/pesquisar',{
+          nome: this.busca
+        })
         this.listaPessoas = response.data
-      })
+        console.log(this.listaPessoas)
+        for(let pessoa of this.listaPessoas) {
+          let fotoResponse = await api.get(`/foto/download/${pessoa.id}`, {
+            responseType: 'blob'
+          })
+          pessoa.foto = URL.createObjectURL(fotoResponse.data)
+        }
+      }catch(error) {
+        console.error(error);
+      }
+
+      // response = await api.post('/pessoa/pesquisar', {
+      //   nome: this.busca
+      // }).then(response => {
+      //   this.listaPessoas = response.data
+      // })
 
       // api.get('/favorito/pesquisar').then(response => {
       //   console.log(response)
       // })
 
+    },
+    mostrarPerson(pessoa){
+      this.showModal = true
+      this.currentPerson = pessoa
+    },
+    onCompleted(){
+      this.showModal = false
+      this.infoUser()
     }
   }
 }
