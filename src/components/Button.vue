@@ -1,7 +1,6 @@
 <template>
   <button 
-    class="form_button" 
-    @click="onClick" 
+    class="form_button"
     :type="type"
   >
     {{title}}
@@ -14,11 +13,6 @@ export default {
     title: String,
     type: String
   },
-  methods: {
-    onClick(event){
-      this.$emit('click', event)
-    }
-  }
 }
 </script>
 
