@@ -26,7 +26,7 @@
             <div class="icons">
               <ph-heart :size="24" />
               <ph-pencil :size="24" @click="mostrarPerson(pessoa)" />
-              <ph-trash :size="24" />
+              <ph-trash :size="24" id="show-modal-confirmation"  @click="showConfirmationModal(pessoa)"/>
             </div>
             
           </div>
@@ -45,6 +45,28 @@
             </template>
 
           </Modal>
+
+          <Modal :show="showModalConfirmation" @close="showModalConfirmation = false">
+            <template #header>
+              <h3>Confirmar</h3>
+            </template>
+            <template #body>
+              <p>Você tem certeza que deseja excluir?</p>
+            </template>
+            <template #footer>
+              <div class="modal-container-btn">
+                <Button 
+                  title="Não"
+                  @click="showModalConfirmation = false"
+                />
+                <Button
+                  title="Sim"
+                  @click="onDelete(personDelete)"
+                />
+              </div>
+            </template>
+          </Modal>
+
         </Teleport>
 
       </section>
@@ -68,8 +90,10 @@ export default {
     return {
       busca: '',
       listaPessoas: [],
-      showModal: false, 
+      showModal: false,
+      showModalConfirmation: false,
       currentPerson: null,
+      personDelete: null,
     }
   },
   props: {
@@ -97,7 +121,7 @@ export default {
     onSearchInput (value) {
       this.busca = value
     },
-    async infoUser(){
+    async infoUser() {
       try {
         let response = await api.post('/pessoa/pesquisar',{
           nome: this.busca
@@ -125,13 +149,30 @@ export default {
       // })
 
     },
-    mostrarPerson(pessoa){
+    mostrarPerson(pessoa) {
       this.showModal = true
       this.currentPerson = pessoa
     },
-    onCompleted(){
+    onCompleted() {
       this.showModal = false
       this.infoUser()
+    },
+    showConfirmationModal(pessoa) {
+      this.showModalConfirmation = true
+      this.personDelete = pessoa
+    },
+    async onDelete(pessoa) {
+      console.log("@@")
+      try {
+        api.delete(`/pessoa/remover/${pessoa.id}`)
+        .then((response) => {
+          this.infoUser()
+        })
+      } catch(error) {
+        console.log(error)
+      } finally {
+        this.showModalConfirmation = false
+      }
     }
   }
 }
@@ -200,6 +241,10 @@ export default {
     transform: translateY(-3px);
   }
   .info-row {
+    display: flex;
+    gap: 2rem;
+  }
+  .modal-container-btn {
     display: flex;
     gap: 2rem;
   }
