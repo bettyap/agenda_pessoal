@@ -2,27 +2,22 @@
   <div class="container-search">
     <input 
       class="search_input"
-      type="text" 
+      type="search" 
       placeholder="Buscar"
-      @input="onInput"
+      @input="onChangeDebounced"
     />
-    <button class="search_btn" @click="$emit('click')">
-      <ph-magnifying-glass :size="32" color="#6da1d2" />
-    </button>
+
   </div>
 </template>
 
 <script>
-  import { PhMagnifyingGlass } from 'phosphor-vue';
+  import { debounce } from '../utils/debounce.js'
 export default {
-  components: {
-    PhMagnifyingGlass,
+  created() {
+    this.onChangeDebounced = debounce(event => {
+      this.$emit('change', event.target.value)
+    }, 500);
   },
-  methods: {
-    onInput(event) {
-      this.$emit('input', event.target.value)
-    }
-  }
 }
 </script>
 
@@ -38,10 +33,5 @@ export default {
     width: 100%;
     padding: 0.25rem;
     border: none;
-  }
-  .search_btn {
-    border: none;
-    background: var(--white);
-    cursor: pointer;
   }
 </style>

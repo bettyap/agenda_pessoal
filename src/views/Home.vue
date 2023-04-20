@@ -4,7 +4,7 @@
     <main class="main">
       <Sidebar />
       <section class="content">
-        <Search @input="onSearchInput" />
+        <Search @change="onSearchInput" />
         <div class="container-table">
           <div v-for="pessoa in listaPessoas" :key="pessoa.id" class="card" >
             <template v-if="pessoa.foto">
@@ -120,6 +120,7 @@ export default {
   methods: {
     onSearchInput (value) {
       this.busca = value
+      this.infoUser()
     },
     async infoUser() {
       try {
@@ -127,7 +128,6 @@ export default {
           nome: this.busca
         })
         this.listaPessoas = response.data
-        console.log(this.listaPessoas)
         for(let pessoa of this.listaPessoas) {
           let fotoResponse = await api.get(`/foto/download/${pessoa.id}`, {
             responseType: 'blob'
@@ -162,14 +162,13 @@ export default {
       this.personDelete = pessoa
     },
     async onDelete(pessoa) {
-      console.log("@@")
       try {
         api.delete(`/pessoa/remover/${pessoa.id}`)
         .then((response) => {
           this.infoUser()
         })
       } catch(error) {
-        console.log(error)
+        console.error(error)
       } finally {
         this.showModalConfirmation = false
       }
