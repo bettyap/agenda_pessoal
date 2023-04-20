@@ -175,7 +175,7 @@ export default {
           }
         })
       } catch (error) {
-        console.log(error)
+        console.error(error)
       }
       return response 
     },
@@ -193,15 +193,13 @@ export default {
     },
 
     async onUpload(id) {
-      const formData = new FormData();
-      console.log(this.$refs.fileInput)
-      formData.append('foto', this.$refs.fileInput.files[0]);
+      const formData = new FormData()
+      formData.append('foto', this.$refs.fileInput.files[0])
 
       let response = null
 
       try {
-        response = await api.post(`/foto/upload/${id}`, formData);
-        console.log('File uploaded:', response);
+        response = await api.post(`/foto/upload/${id}`, formData)
       } catch (error) {
         console.error(error);
       }
