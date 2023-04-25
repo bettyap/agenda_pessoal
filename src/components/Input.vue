@@ -9,6 +9,7 @@
     :value="modelValue"
     @input="onInput"
     :max="max"
+    :placeholder="placeholder"
   >
   <span v-if="errors.length" class="form-error">{{errors[0].$message}}</span>
 </template>
@@ -30,6 +31,7 @@ export default {
       default: ''
     },
     max: String,
+    placeholder: String
   },
   methods: {
     onInput(event) {
