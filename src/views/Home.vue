@@ -22,6 +22,11 @@
                 <span>{{pessoa.endereco.cidade}}</span> 
                 <span>{{pessoa.endereco.estado}}</span>
               </div>
+              <div class="icons">
+                <ph-plus :size="24" weight="bold" @click="showModalContact = true" />
+                <span @click="showModalContact = true">Contato</span>
+                <!-- <button @click="showModalContact = true">Adicionar contato</button> -->
+              </div>
             </div>
             <div class="icons">
               <ph-heart :size="24" />
@@ -31,7 +36,14 @@
             
           </div>
         </div>
-        <button id="show-modal" @click="mostrarPerson(null)" >Adicionar</button>
+        <div class="container-add">
+          <Button 
+            title="Adicionar"
+            class="button-add"
+            id="show-modal" 
+            @click="mostrarPerson(null)" 
+          />
+        </div>
 
         <Teleport to="body">
           <Modal :show="showModal" @close="showModal = false">
@@ -67,6 +79,23 @@
             </template>
           </Modal>
 
+          <Modal :show="showModalContact" @close="showModalContact = false">
+            <template #header>
+              <h3>Adicionar contato</h3>
+            </template>
+            <template #body>
+              <DynamicInput></DynamicInput>
+            </template>
+            <template #footer>
+              <div class="modal-container-btn">
+                <Button 
+                  title="Salvar"
+                  @click="showModalConfirmation = false"
+                />
+              </div>
+            </template>
+          </Modal>
+
         </Teleport>
 
       </section>
@@ -78,12 +107,13 @@
 import Header from '../components/Header.vue'
 import Sidebar from '../components/Sidebar.vue'
 import Search from '../components/Search.vue'
-import { PhHeart, PhPencil, PhTrash } from "phosphor-vue"
+import { PhHeart, PhPencil, PhPlus, PhTrash } from "phosphor-vue"
 import api from '../services/api.js'
 import Modal from '../components/Modal.vue'
 import Button from '../components/Button.vue'
 import Input from '../components/Input.vue'
 import PersonForm from '../components/PersonForm.vue'
+import DynamicInput from '../components/DynamicInput.vue'
 
 export default {
   data() {
@@ -92,6 +122,7 @@ export default {
       listaPessoas: [],
       showModal: false,
       showModalConfirmation: false,
+      showModalContact: false,
       currentPerson: null,
       personDelete: null,
     }
@@ -108,11 +139,13 @@ export default {
     Search, 
     PhHeart, 
     PhPencil, 
+    PhPlus,
     PhTrash, 
     Modal, 
     Button, 
     Input, 
-    PersonForm
+    PersonForm,
+    DynamicInput
   },
   mounted () {
     this.infoUser()
@@ -202,7 +235,7 @@ export default {
   }
   .card {
     background: var(--white);
-    height: 8rem;
+    height: 9rem;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
     border-radius: 4px;
@@ -222,11 +255,13 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     padding-left: 0.5rem;
     gap: 0.5rem;
   }
   .icons {
     display: flex;
+    align-items: center;
     gap: 0.75rem;
     height: 1.25rem;
     cursor: pointer;
@@ -246,6 +281,26 @@ export default {
   .modal-container-btn {
     display: flex;
     gap: 2rem;
+  }
+  .form_label {
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    display: flex;
+  }
+  .form_input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+  .container-add {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .button-add {
+    width: 20%;
   }
   @media(max-width: 880px){
     .main {
