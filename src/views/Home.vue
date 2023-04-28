@@ -22,9 +22,9 @@
                 <span>{{pessoa.endereco.cidade}}</span> 
                 <span>{{pessoa.endereco.estado}}</span>
               </div>
-              <div class="icons">
-                <ph-plus :size="24" weight="bold" @click="showModalContact = true" />
-                <span @click="showModalContact = true">Contato</span>
+              <div class="icons" @click="showContactModal(pessoa)">
+                <ph-plus :size="24" weight="bold" />
+                <span>Contato</span>
                 <!-- <button @click="showModalContact = true">Adicionar contato</button> -->
               </div>
             </div>
@@ -84,15 +84,7 @@
               <h3>Adicionar contato</h3>
             </template>
             <template #body>
-              <DynamicInput></DynamicInput>
-            </template>
-            <template #footer>
-              <div class="modal-container-btn">
-                <Button 
-                  title="Salvar"
-                  @click="showModalConfirmation = false"
-                />
-              </div>
+              <DynamicInput :pessoaContato="pessoaContatoEditar" ></DynamicInput>
             </template>
           </Modal>
 
@@ -125,6 +117,7 @@ export default {
       showModalContact: false,
       currentPerson: null,
       personDelete: null,
+      pessoaContatoEditar: null
     }
   },
   props: {
@@ -166,21 +159,13 @@ export default {
             responseType: 'blob'
           })
           pessoa.foto = URL.createObjectURL(fotoResponse.data)
+
+          let contatoResponse = await api.get(`/contato/listar/${pessoa.id}`)
+          pessoa.contatos = contatoResponse.data
         }
       }catch(error) {
         console.error(error);
       }
-
-      // response = await api.post('/pessoa/pesquisar', {
-      //   nome: this.busca
-      // }).then(response => {
-      //   this.listaPessoas = response.data
-      // })
-
-      // api.get('/favorito/pesquisar').then(response => {
-      //   console.log(response)
-      // })
-
     },
     mostrarPerson(pessoa) {
       this.showModal = true
@@ -205,6 +190,10 @@ export default {
       } finally {
         this.showModalConfirmation = false
       }
+    },
+    showContactModal(pessoa) {
+      this.showModalContact = true
+      this.pessoaContatoEditar = pessoa
     }
   }
 }

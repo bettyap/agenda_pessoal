@@ -33,26 +33,33 @@
         <div class="icons">
           <!-- <ph-heart v-if="contato.id" :size="24" color="#6da1d2" /> -->
           <ph-heart :size="24" color="#6da1d2" />
-          <ph-trash :size="24" color="#6da1d2" @click="remove(index)" />
+          <ph-trash :size="24" color="#6da1d2" @click="removerContato(index)" />
         </div>
       </div>
       
       <button
         type="button"
         class="dynamic-input-button"
-        @click="adicionarMaisContatos()"
+        @click="adicionarContato()"
       >
         Adicionar Mais
       </button>
+    </div>
+    <div class="modal-container-btn">
+      <Button 
+        title="Salvar"
+        @click="cadastrarContato(pessoa)"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import Input from '../components/Input.vue'
+import Button from '../components/Button.vue'
 import { PhX, PhHeart, PhTrash } from "phosphor-vue"
 export default {
-  components: { Input, PhX, PhHeart, PhTrash },
+  components: { Input, PhX, PhHeart, PhTrash, Button },
   data() {
     return {
       contatos: [
@@ -60,7 +67,8 @@ export default {
           isEditing: true,
           contatoTipo: 0,
           value: '',
-          descricao: ''
+          descricao: '',
+          private: false,
         },
       ],
       contatoNome: {
@@ -76,8 +84,38 @@ export default {
       }
     };
   },
+  props: {
+    pessoaContato:{
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
+  mounted() {
+    if (this.pessoaContato.contatos.length){
+      this.contatos = this.pessoaContato.contatos.map(contato => {
+
+        let value = ""
+        if (contato.tipoContato === "EMAIL") {
+          value = contato.email
+        } else {
+          value = contato.telefone
+        }
+
+        return {
+          id: contato.id,
+          descricao: contato.tag,
+          contatoTipo: contato.tipoContato,
+          privado: contato.privado,
+          value: value,
+          isEditing: false
+        }
+      })
+    }
+  },
   methods: {
-    adicionarMaisContatos() {
+    adicionarContato() {
       this.contatos.push({
         isEditing: true,
         contatoTipo: 0,
@@ -85,10 +123,13 @@ export default {
         descricao: '',
       });
     },
-    remove(index) {
+    removerContato(index) {
       this.contatos.splice(index, 1);
     },
-    
+    cadastrarContato(pessoa) {
+      api.post('/contato/salvar', 
+      )
+    }
   }
 }
 </script>
@@ -148,7 +189,5 @@ export default {
     display: flex;
     gap: 0.25rem;
     cursor: pointer;
-  }
-  .icon svg {
   }
 </style>
