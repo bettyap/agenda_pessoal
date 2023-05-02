@@ -3,12 +3,13 @@
     <div class="dynamic-input-container__button">
       <div class="dynamic-input-content" v-for="(contato, index) in contatos" :key="index">
         <div v-if="!contato.isEditing">
-          <p>{{contatoNome[contato.contatoTipo]}}</p>
+          <p>{{contato.contatoTipo}}</p>
           <p>{{contato.value}}</p>
-          <p>{{contato.descricao}}</p>
+          <p>Descrição: {{contato.descricao}}</p>
           <button
             type="button"
             class="dynamic-input-button"
+            @click="editarContato(contato)"
           >
             Editar
           </button>
@@ -17,10 +18,10 @@
         <div v-else>
           <div class="dynamic-input-content__select">
             <select name="" v-model="contato.contatoTipo" class="form_label">
-              <option disabled value="0" class="form_label">Escolha o tipo de contato</option>
+              <option value="0" class="form_label">Escolha o tipo de contato</option>
               <option value="1" class="form_label">Celular</option>
-              <option value="2" class="form_label">Telefone</option>
-              <option value="3" class="form_label">Email</option>
+              <option value="2" class="form_label">Email</option>
+              <option value="3" class="form_label">Telefone</option>
             </select>
           </div>
           <div class="dynamic-input-content__input">
@@ -33,7 +34,7 @@
         <div class="icons">
           <!-- <ph-heart v-if="contato.id" :size="24" color="#6da1d2" /> -->
           <ph-heart :size="24" color="#6da1d2" />
-          <ph-trash :size="24" color="#6da1d2" @click="removerContato(index)" />
+          <ph-trash :size="24" color="#6da1d2" @click="removerContato(contato,index)" />
         </div>
       </div>
       
@@ -48,13 +49,14 @@
     <div class="modal-container-btn">
       <Button 
         title="Salvar"
-        @click="cadastrarContato(pessoa)"
+        @click="cadastrarContato()"
       />
     </div>
   </div>
 </template>
 
 <script>
+import api from '../services/api'
 import Input from '../components/Input.vue'
 import Button from '../components/Button.vue'
 import { PhX, PhHeart, PhTrash } from "phosphor-vue"
@@ -68,19 +70,19 @@ export default {
           contatoTipo: 0,
           value: '',
           descricao: '',
-          private: false,
+          privado: false,
         },
       ],
       contatoNome: {
-        0: "Escolha o tipo de contato",
-        1: "Celular",
-        2: "Telefone",
-        3: "Email"
+        0: "Escolha",
+        1: "CELULAR",
+        2: "EMAIL",
+        3: "TELEFONE"
       },
       contatoMasks: {
         1: '(##)#####-####',
-        2: '(##)####-####',
-        3: ''
+        2: '',
+        3: '(##)####-####'
       }
     };
   },
@@ -123,12 +125,50 @@ export default {
         descricao: '',
       });
     },
-    removerContato(index) {
-      this.contatos.splice(index, 1);
+    async removerContato(contato,index) {
+      if (contato.id) {
+        try {
+          api.delete(`/contato/remover/${contato.id}`)
+          .then((response) => {})
+        } catch (error) {
+          console.error(error)
+        } 
+      }
+      this.contatos.splice(index, 1)
     },
-    cadastrarContato(pessoa) {
-      api.post('/contato/salvar', 
-      )
+    async cadastrarContato() {
+      for(let contato of this.contatos) {
+        
+        if(!contato.id) {
+          let email = null
+          let telefone = null
+
+          if (this.contatoNome[contato.contatoTipo] === "EMAIL") {
+            email = contato.value
+          } else {
+            telefone = contato.value 
+          }
+
+          try {
+            let response = await api.post('/contato/salvar', {
+              tag: contato.descricao,
+              privado: contato.privado,
+              email: email,
+              telefone: telefone,
+              tipoContato: this.contatoNome[contato.contatoTipo],
+              pessoa: {
+                id: this.pessoaContato.id
+              }
+            })
+          } catch (error) {
+            console.error(error)
+          }
+        }
+      }
+      this.$emit('createContact')
+    },
+    editarContato(contato){
+      contato.isEditing = true
     }
   }
 }

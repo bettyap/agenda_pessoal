@@ -81,10 +81,10 @@
 
           <Modal :show="showModalContact" @close="showModalContact = false">
             <template #header>
-              <h3>Adicionar contato</h3>
+              <h3>Gerenciar contatos</h3>
             </template>
             <template #body>
-              <DynamicInput :pessoaContato="pessoaContatoEditar" ></DynamicInput>
+              <DynamicInput :pessoaContato="pessoaContatoEditar" @createContact="onCreateContact"></DynamicInput>
             </template>
           </Modal>
 
@@ -159,9 +159,7 @@ export default {
             responseType: 'blob'
           })
           pessoa.foto = URL.createObjectURL(fotoResponse.data)
-
-          let contatoResponse = await api.get(`/contato/listar/${pessoa.id}`)
-          pessoa.contatos = contatoResponse.data
+          
         }
       }catch(error) {
         console.error(error);
@@ -191,10 +189,17 @@ export default {
         this.showModalConfirmation = false
       }
     },
-    showContactModal(pessoa) {
+    async showContactModal(pessoa) {
+      let contatoResponse = await api.get(`/contato/listar/${pessoa.id}`)
+      pessoa.contatos = contatoResponse.data
+
       this.showModalContact = true
       this.pessoaContatoEditar = pessoa
-    }
+    },
+    onCreateContact() {
+      this.showModalContact = false
+      this.infoUser()
+    },
   }
 }
 </script>
