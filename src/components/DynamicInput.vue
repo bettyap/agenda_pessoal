@@ -3,7 +3,7 @@
     <div class="dynamic-input-container__button">
       <div class="dynamic-input-content" v-for="(contato, index) in contatos" :key="index">
         <div v-if="!contato.isEditing">
-          <p>{{contato.contatoTipo}}</p>
+          <p>{{contato.contatoTipo.toLowerCase()}}</p>
           <p>{{contato.value}}</p>
           <p>Descrição: {{contato.descricao}}</p>
           <button
@@ -19,9 +19,9 @@
           <div class="dynamic-input-content__select">
             <select name="" v-model="contato.contatoTipo" class="form_label">
               <option value="0" class="form_label">Escolha o tipo de contato</option>
-              <option value="1" class="form_label">Celular</option>
-              <option value="2" class="form_label">Email</option>
-              <option value="3" class="form_label">Telefone</option>
+              <option value="CELULAR" class="form_label">Celular</option>
+              <option value="EMAIL" class="form_label">Email</option>
+              <option value="TELEFONE" class="form_label">Telefone</option>
             </select>
           </div>
           <div class="dynamic-input-content__input">
@@ -73,16 +73,10 @@ export default {
           privado: false,
         },
       ],
-      contatoNome: {
-        0: "Escolha",
-        1: "CELULAR",
-        2: "EMAIL",
-        3: "TELEFONE"
-      },
       contatoMasks: {
-        1: '(##)#####-####',
-        2: '',
-        3: '(##)####-####'
+        'CELULAR': '(##)#####-####',
+        'EMAIL': '',
+        'TELEFONE': '(##)####-####'
       }
     };
   },
@@ -138,38 +132,52 @@ export default {
     },
     async cadastrarContato() {
       for(let contato of this.contatos) {
-        
-        if(!contato.id) {
-          let email = null
-          let telefone = null
 
-          if (this.contatoNome[contato.contatoTipo] === "EMAIL") {
-            email = contato.value
-          } else {
-            telefone = contato.value 
-          }
+        if(!contato.isEditing) {
+          continue
+        }
 
-          try {
-            let response = await api.post('/contato/salvar', {
-              tag: contato.descricao,
-              privado: contato.privado,
-              email: email,
-              telefone: telefone,
-              tipoContato: this.contatoNome[contato.contatoTipo],
-              pessoa: {
-                id: this.pessoaContato.id
-              }
-            })
-          } catch (error) {
-            console.error(error)
+        let email = null
+        let telefone = null
+
+        if (contato.contatoTipo === "EMAIL") {
+          email = contato.value
+        } else {
+          telefone = contato.value 
+        }
+
+        let usuario = localStorage.getItem("user")
+        usuario = JSON.parse(usuario)
+
+        let contatoRequest = {
+          tag: contato.descricao,
+          privado: contato.privado,
+          email: email,
+          telefone: telefone,
+          tipoContato: contato.contatoTipo,
+          pessoa: {
+            id: this.pessoaContato.id
+          },
+          usuario: {
+            id: usuario.id
           }
         }
-      }
+
+        if(contato.id) {
+          contatoRequest.id = contato.id
+        }
+
+        try {
+          let response = await api.post('/contato/salvar', contatoRequest)
+        } catch (error) {
+          console.error(error)
+        }
+      } 
       this.$emit('createContact')
     },
-    editarContato(contato){
+    editarContato(contato) {
       contato.isEditing = true
-    }
+    } 
   }
 }
 </script>
