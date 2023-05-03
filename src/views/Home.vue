@@ -25,11 +25,9 @@
               <div class="icons" @click="showContactModal(pessoa)">
                 <ph-plus :size="24" weight="bold" />
                 <span>Contato</span>
-                <!-- <button @click="showModalContact = true">Adicionar contato</button> -->
               </div>
             </div>
             <div class="icons">
-              <ph-heart :size="24" />
               <ph-pencil :size="24" @click="mostrarPerson(pessoa)" />
               <ph-trash :size="24" id="show-modal-confirmation"  @click="showConfirmationModal(pessoa)"/>
             </div>

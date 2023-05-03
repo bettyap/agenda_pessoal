@@ -33,7 +33,7 @@
         
         <div class="icons">
           <!-- <ph-heart v-if="contato.id" :size="24" color="#6da1d2" /> -->
-          <ph-heart :size="24" color="#6da1d2" />
+          <ph-heart :size="24" color="#6da1d2" @click="toggleFavorito(contato)"/>
           <ph-trash :size="24" color="#6da1d2" @click="removerContato(contato,index)" />
         </div>
       </div>
@@ -71,6 +71,7 @@ export default {
           value: '',
           descricao: '',
           privado: false,
+          favorito: false,
         },
       ],
       contatoMasks: {
@@ -104,6 +105,7 @@ export default {
           descricao: contato.tag,
           contatoTipo: contato.tipoContato,
           privado: contato.privado,
+          favorito: false,
           value: value,
           isEditing: false
         }
@@ -122,8 +124,7 @@ export default {
     async removerContato(contato,index) {
       if (contato.id) {
         try {
-          api.delete(`/contato/remover/${contato.id}`)
-          .then((response) => {})
+          await api.delete(`/contato/remover/${contato.id}`)
         } catch (error) {
           console.error(error)
         } 
@@ -152,6 +153,7 @@ export default {
         let contatoRequest = {
           tag: contato.descricao,
           privado: contato.privado,
+          favorito: contato.favorito,
           email: email,
           telefone: telefone,
           tipoContato: contato.contatoTipo,
@@ -177,8 +179,37 @@ export default {
     },
     editarContato(contato) {
       contato.isEditing = true
-    } 
-  }
+    },
+    async toggleFavorito(contato) {
+      let usuario = localStorage.getItem("user")
+      usuario = JSON.parse(usuario)
+      console.log(contato)
+      
+      if(!contato.favorito){
+        try {
+          let response = await api.post('/favorito/salvar', {
+            id: contato.id,
+            pessoa: {
+              id: this.pessoaContato.id
+            },
+            usuario: {
+              id: usuario.id
+            }
+          })
+          contato.favorito = true
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        try {
+          await api.delete(`/favorito/remover/${contato.id}`)
+          contato.favorito = false
+        } catch (error) {
+          console.error(error)
+        }  
+      }
+    }
+  } 
 }
 </script>
 
