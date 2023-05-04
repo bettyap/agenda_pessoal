@@ -25,9 +25,7 @@
             <label class="form_label">Username:</label>
             <input class="form_input" v-model="username" placeholder="admin" />
 
-            <Button 
-              title="Salvar"
-            />
+            <q-btn class="teste" type="submit" label="Salvar" />
 
           </form>
         </div>
@@ -105,6 +103,10 @@ export default {
 </script>
 
 <style scoped>
+  .teste{
+    background: #98bfdc; 
+    color: white;
+  }
   .container {
     display: flex;
     flex-direction: column;
