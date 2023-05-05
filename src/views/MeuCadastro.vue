@@ -5,29 +5,64 @@
       <Sidebar />
       <main class="main">
         <div class="main_form">
-          <h1>Minhas Informações</h1>
-          <form class="form" @submit="atualizarCadastro">
-            <label class="form_label">Nome Completo:</label>
-            <input class="form_input" v-model="nome" placeholder="Maria da Silva" />
-          
-            <label class="form_label">CPF:</label>
-            <input class="form_input" v-maska data-maska="###.###.###-##" v-model="cpf"  placeholder="000.000.000-00" />
+          <h2>Minhas Informações</h2>
+          <q-form class="q-gutter-md" style="max-width: 25rem; margin-top: 1rem" @submit="atualizarCadastro">
+            <q-input 
+              outlined 
+              v-model="nome" 
+              label="Nome Completo" 
+            />
+            <!-- <label class="form_label">Nome Completo:</label> -->
+            <!-- <input class="form_input" v-model="nome" placeholder="Maria da Silva" /> -->
+
+            <q-input 
+              outlined 
+              v-model="cpf" 
+              label="CPF"
+              mask="###.###.###-##"
+            />
+            <!-- <label class="form_label">CPF:</label> -->
+            <!-- <input class="form_input" v-maska data-maska="###.###.###-##" v-model="cpf"  placeholder="000.000.000-00" /> -->
             
-            <label class="form_label">Data nascimento:</label>
-            <input class="form_input" v-maska data-maska="##/##/####" v-model="dataNascimento" placeholder="05/11/1998" />
+            <q-input 
+              outlined 
+              v-model="dataNascimento" 
+              label="Data nascimento" 
+              type="date"
+              mask="##/##/####"
+            />
+            <!-- <label class="form_label">Data nascimento:</label> -->
+            <!-- <input class="form_input" v-maska data-maska="##/##/####" placeholder="05/11/1998" /> -->
             
-            <label class="form_label">Email:</label>
-            <input class="form_input" v-model="email" placeholder="jhonny@example.com" />
+            <q-input 
+              outlined 
+              v-model="email" 
+              label="Email"
+              type="email"
+            />
+            <!-- <label class="form_label">Email:</label> -->
+            <!-- <input class="form_input" v-model="email" placeholder="jhonny@example.com" /> -->
             
-            <label class="form_label">Telefone:</label>
-            <input class="form_input" v-maska data-maska="(##) #####-####" v-model="telefone" placeholder="(11) 9 7370-5483" />
+            <q-input 
+              outlined 
+              v-model="telefone" 
+              label="Telefone"
+              mask="(##) #####-####"
+            />
+            <!-- <label class="form_label">Telefone:</label> -->
+            <!-- <input class="form_input" v-maska data-maska="(##) #####-####" v-model="telefone" placeholder="(11) 9 7370-5483" /> -->
             
-            <label class="form_label">Username:</label>
-            <input class="form_input" v-model="username" placeholder="admin" />
+            <q-input 
+              outlined 
+              v-model="username" 
+              label="Username" 
+            />
+            <!-- <label class="form_label">Username:</label> -->
+            <!-- <input class="form_input" v-model="username" placeholder="admin" /> -->
 
             <q-btn class="teste" type="submit" label="Salvar" />
-
-          </form>
+          
+          </q-form>
         </div>
       </main>
     </div>
@@ -40,7 +75,7 @@ import Sidebar from '../components/Sidebar.vue'
 import Button from '../components/Button.vue'
 import api from '../services/api'
 import { toast } from 'vue3-toastify';
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 export default {
   components: { Header, Sidebar, Button },
@@ -58,7 +93,7 @@ export default {
     let userInfo = localStorage.getItem("user")
     userInfo = JSON.parse(userInfo)
     this.cpf = userInfo.cpf
-    this.dataNascimento = dayjs(userInfo.dataNascimento).format("DD/MM/YYYY")
+    this.dataNascimento = userInfo.dataNascimento
     this.nome = userInfo.nome
     this.telefone = userInfo.telefone
     this.email = userInfo.email
@@ -71,12 +106,12 @@ export default {
     atualizarCadastro(event){
       event.preventDefault()
 
-      let dataNascimento = dayjs(this.dataNascimento, "DD/MM/YYYY")
-        .format("YYYY-MM-DD")
+      // let dataNascimento = dayjs(this.dataNascimento, "DD/MM/YYYY")
+      //   .format("YYYY-MM-DD")
 
       api.put('/usuario/atualizar',{
         cpf: this.cpf,
-        dataNascimento: dataNascimento,
+        dataNascimento: this.dataNascimento,
         email: this.email,
         id: this.id,
         nome: this.nome,
