@@ -6,7 +6,7 @@ import routes from './routes'
 import { vMaska } from "maska"
 import Vue3Toasity from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import { Quasar } from 'quasar'
+import { Quasar, Notify } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
 
@@ -17,5 +17,12 @@ createApp(App)
     autoClose: 3000,
     theme: "colored"
   })
-  .use(Quasar)
+  .use(Quasar, {
+    plugins: {
+      Notify
+    },
+    config: {
+      notify: { /* look at QuasarConfOptions from the API card */ }
+    }
+  })
   .mount('#app')

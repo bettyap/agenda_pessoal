@@ -81,8 +81,9 @@ import Header from '../components/Header.vue'
 import Sidebar from '../components/Sidebar.vue'
 import Button from '../components/Button.vue'
 import api from '../services/api'
-import { toast } from 'vue3-toastify';
+// import { toast } from 'vue3-toastify';
 // import dayjs from 'dayjs'
+import { Notify } from 'quasar'
 
 export default {
   components: { Header, Sidebar, Button },
@@ -127,16 +128,30 @@ export default {
         username: this.username
       }).then( response => {
         if (response.status == 200) {
-          toast.success("Atualizado com sucesso!", {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+          Notify.create({
+            message: 'Atualizado com sucesso!',
+            color: 'positive',
+            position: 'top-right',
+            type: 'positive',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
+          // toast.success("Atualizado com sucesso!", {
+          //   position: toast.POSITION.TOP_RIGHT,
+          // });
 
           localStorage.setItem("user", JSON.stringify(response.data.object))
         }
-      }).catch((_error) =>{
-        toast.error("Algo deu errado!", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+      }).catch((_error) => {
+          Notify.create({
+            message: 'Algo deu errado!',
+            color: 'negative',
+            position: 'top-right',
+            type: 'negative',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
+        // toast.error("Algo deu errado!", {
+        //   position: toast.POSITION.TOP_RIGHT,
+        // });
       })
       
     }
