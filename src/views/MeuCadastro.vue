@@ -6,11 +6,13 @@
       <main class="main">
         <div class="main_form">
           <h2>Minhas Informações</h2>
+
           <q-form class="q-gutter-md" style="max-width: 25rem; margin-top: 1rem" @submit="atualizarCadastro">
             <q-input 
               outlined 
               v-model="nome" 
               label="Nome Completo" 
+              :rules="[val => !!val || 'Nome é obrigatório']"
             />
             <!-- <label class="form_label">Nome Completo:</label> -->
             <!-- <input class="form_input" v-model="nome" placeholder="Maria da Silva" /> -->
@@ -20,6 +22,7 @@
               v-model="cpf" 
               label="CPF"
               mask="###.###.###-##"
+              :rules="[val => !!val || 'CPF é obrigatório']"
             />
             <!-- <label class="form_label">CPF:</label> -->
             <!-- <input class="form_input" v-maska data-maska="###.###.###-##" v-model="cpf"  placeholder="000.000.000-00" /> -->
@@ -30,6 +33,7 @@
               label="Data nascimento" 
               type="date"
               mask="##/##/####"
+              :rules="[val => !!val || 'Data de Nascimento é obrigatório']"
             />
             <!-- <label class="form_label">Data nascimento:</label> -->
             <!-- <input class="form_input" v-maska data-maska="##/##/####" placeholder="05/11/1998" /> -->
@@ -39,6 +43,7 @@
               v-model="email" 
               label="Email"
               type="email"
+              :rules="[val => !!val || 'Email é obrigatório']"
             />
             <!-- <label class="form_label">Email:</label> -->
             <!-- <input class="form_input" v-model="email" placeholder="jhonny@example.com" /> -->
@@ -48,6 +53,7 @@
               v-model="telefone" 
               label="Telefone"
               mask="(##) #####-####"
+              :rules="[val => !!val || 'Telefone é obrigatório']"
             />
             <!-- <label class="form_label">Telefone:</label> -->
             <!-- <input class="form_input" v-maska data-maska="(##) #####-####" v-model="telefone" placeholder="(11) 9 7370-5483" /> -->
@@ -55,7 +61,8 @@
             <q-input 
               outlined 
               v-model="username" 
-              label="Username" 
+              label="Username"
+              :rules="[val => !!val || 'Username é obrigatório']"
             />
             <!-- <label class="form_label">Username:</label> -->
             <!-- <input class="form_input" v-model="username" placeholder="admin" /> -->
