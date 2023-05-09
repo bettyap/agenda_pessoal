@@ -5,7 +5,7 @@
         <div class="modal-header">
           <slot name="header"></slot>
           <button @click="$emit('close')" class="close-icon">
-            <ph-x :size="24" weight="bold"/>
+            <q-icon size="1.5rem" name="close" font="weight"/>
           </button>
         </div>
 
@@ -67,10 +67,10 @@ export default {
     border: none;
     background: transparent;
   }
-  .close-icon svg {
+  .close-icon i {
     transition: transform .1s ease;
   }
-  .close-icon svg:hover {
+  .close-icon i:hover {
     color: var(--blue-300);
     transform: translateY(-3px);
   }

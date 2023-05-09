@@ -6,46 +6,47 @@
       <section class="content">
         <Search @change="onSearchInput" />
         <div class="container-table">
-          <div v-for="pessoa in listaPessoas" :key="pessoa.id" class="card" >
-            <template v-if="pessoa.foto">
-              <img class="avatar" :src="pessoa.foto" alt="">
-            </template>
-            <template v-else>
-              <img class="avatar" alt="">
-            </template>
-            
-            <div class="card-info">
-              <span>{{pessoa.nome}}</span>
-              <span>{{pessoa.cpf}}</span>
-              <div class="info-row">
-                <span>{{pessoa.endereco.cep}}</span>
-                <span>{{pessoa.endereco.cidade}}</span> 
-                <span>{{pessoa.endereco.estado}}</span>
+          <q-card v-for="pessoa in listaPessoas" :key="pessoa.id" class="container-card">
+            <q-card-section class="card">
+              <template v-if="pessoa.foto">
+                <img class="avatar" :src="pessoa.foto" alt="">
+              </template>
+              <template v-else>
+                <img class="avatar" alt="">
+              </template>
+              
+              <div class="card-info">
+                <span>{{pessoa.nome}}</span>
+                <span>{{pessoa.cpf}}</span>
+                <div class="info-row">
+                  <span>{{pessoa.endereco.cep}}</span>
+                  <span>{{pessoa.endereco.cidade}}</span> 
+                  <span>{{pessoa.endereco.estado}}</span>
+                </div>
+                <div class="icons" @click="showContactModal(pessoa)">
+                  <q-icon name="add" size="1.5rem" />
+                  <span>Contato</span>
+                </div>
               </div>
-              <div class="icons" @click="showContactModal(pessoa)">
-                <q-icon name="add" size="1.5rem" />
-                <span>Contato</span>
+              <div class="icons">
+                <q-icon 
+                  name="edit"
+                  size="1.5rem"
+                  @click="mostrarPerson(pessoa)"
+                />
+                <q-icon 
+                  name="delete"
+                  size="1.5rem"
+                  id="show-modal-confirmation"  
+                  @click="showConfirmationModal(pessoa)"
+                />
               </div>
-            </div>
-            <div class="icons">
-              <q-icon 
-                name="edit"
-                size="1.5rem"
-                @click="mostrarPerson(pessoa)"
-              />
-              <q-icon 
-                name="delete"
-                size="1.5rem"
-                id="show-modal-confirmation"  
-                @click="showConfirmationModal(pessoa)"
-              />
-            </div>
-            
-          </div>
+            </q-card-section>
+          </q-card>
         </div>
         <div class="container-add">
-          <Button 
-            title="Adicionar"
+          <q-btn 
+            label="Adicionar"
             class="button-add"
             id="show-modal" 
             @click="mostrarPerson(null)" 
@@ -249,15 +250,18 @@ export default {
     grid-template-columns: auto auto;
     margin-top: 3rem;
   }
+  .container-card{
+    margin: 1rem;
+  }
   .card {
-    background: var(--white);
+    /* background: var(--white);
     height: 9rem;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    border-radius: 4px;
+    border-radius: 4px; */
     display: flex;
     padding: 1rem;
-    margin: 0.5rem 0.5rem
+    /*margin: 0.5rem 0.5rem */
   }
   .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -317,6 +321,8 @@ export default {
   }
   .button-add {
     width: 20%;
+    background: #98bfdc; 
+    color: white;
   }
   @media(max-width: 880px){
     .main {
