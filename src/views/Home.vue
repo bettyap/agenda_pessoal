@@ -104,6 +104,7 @@ import Button from '../components/Button.vue'
 import Input from '../components/Input.vue'
 import PersonForm from '../components/PersonForm.vue'
 import DynamicInput from '../components/DynamicInput.vue'
+import { Notify } from 'quasar'
 
 export default {
   data() {
@@ -177,11 +178,25 @@ export default {
     },
     async onDelete(pessoa) {
       try {
-        api.delete(`/pessoa/remover/${pessoa.id}`)
-        .then((response) => {
+        let response = await api.delete(`/pessoa/remover/${pessoa.id}`)
+        if (response.status == 200) {
           this.infoUser()
-        })
+          Notify.create({
+            message: 'Pessoa excluída com sucesso!',
+            color: 'positive',
+            position: 'top-right',
+            type: 'positive',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
+        } 
       } catch(error) {
+        Notify.create({
+          message: 'Algo deu errado, lista de contatos existentes!',
+          color: 'negative',
+          position: 'top-right',
+          type: 'negative',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
         console.error(error)
       } finally {
         this.showModalConfirmation = false

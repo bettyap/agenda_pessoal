@@ -76,6 +76,7 @@ import DynamicInput from './DynamicInput.vue'
 import Input from './Input.vue'
 import useVuelidate from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
+import { Notify } from 'quasar'
 
 export default {
   setup () {
@@ -174,7 +175,21 @@ export default {
             pais: this.endereco.pais
           }
         })
+        Notify.create({
+          message: 'Realizado com sucesso!',
+          color: 'positive',
+          position: 'top-right',
+          type: 'positive',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
       } catch (error) {
+        Notify.create({
+          message: 'Algo deu errado!',
+          color: 'negative',
+          position: 'top-right',
+          type: 'negative',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
         console.error(error)
       }
       return response 

@@ -60,6 +60,8 @@ import api from '../services/api'
 import Input from '../components/Input.vue'
 import Button from '../components/Button.vue'
 import { PhX, PhHeart, PhTrash } from "phosphor-vue"
+import { Notify } from 'quasar'
+
 export default {
   components: { Input, PhX, PhHeart, PhTrash, Button },
   data() {
@@ -124,8 +126,22 @@ export default {
     async removerContato(contato,index) {
       if (contato.id) {
         try {
-          await api.delete(`/contato/remover/${contato.id}`)
+          api.delete(`/contato/remover/${contato.id}`)
+          Notify.create({
+            message: 'Contato excluído com sucesso!',
+            color: 'positive',
+            position: 'top-right',
+            type: 'positive',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
         } catch (error) {
+          Notify.create({
+            message: 'Algo deu errado!',
+            color: 'negative',
+            position: 'top-right',
+            type: 'negative',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
           console.error(error)
         } 
       }
@@ -171,7 +187,21 @@ export default {
 
         try {
           let response = await api.post('/contato/salvar', contatoRequest)
+          Notify.create({
+            message: 'Contato criado com sucesso!',
+            color: 'positive',
+            position: 'top-right',
+            type: 'positive',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
         } catch (error) {
+          Notify.create({
+            message: 'Algo deu errado!',
+            color: 'negative',
+            position: 'top-right',
+            type: 'negative',
+            actions: [{ icon: 'close', color: 'white' }]
+          })
           console.error(error)
         }
       } 
