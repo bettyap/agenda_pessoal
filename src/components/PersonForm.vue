@@ -1,72 +1,129 @@
 <template>
-  <form class="form" @submit="onSubmit">
+  <q-form class="form" @submit="onSubmit">
     <label>Adicionar foto</label>
     <img v-if="preview" :src="preview" alt="Preview" class="foto-preview">
-    <input type="file" ref="fileInput" @change="previewImage"/>
-    <Input 
+    <input type="file" ref="fileInput" @change="previewImage" class="form-input"/>
+    
+    <q-input 
+      outlined 
+      v-model="nome" 
+      label="Nome Completo *" 
+      :rules="[val => !!val || 'Nome é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="cpf" 
+      label="CPF *"
+      mask="###.###.###-##"
+      :rules="[val => !!val || 'CPF é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.pais" 
+      label="País *" 
+      :rules="[val => !!val || 'País é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.estado" 
+      label="Estado *" 
+      :rules="[val => !!val || 'Estado é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.cep" 
+      label="CEP *"
+      mask="#####-###"
+      :rules="[val => !!val || 'CEP é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.cidade" 
+      label="Cidade *" 
+      :rules="[val => !!val || 'Cidade é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.bairro" 
+      label="Bairro *" 
+      :rules="[val => !!val || 'Bairro é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.logradouro" 
+      label="Endereço *" 
+      :rules="[val => !!val || 'Endereço é obrigatório']"
+    />
+    <q-input 
+      outlined 
+      v-model="endereco.numero" 
+      label="Número *" 
+      :rules="[val => !!val || 'Número é obrigatório']"
+    />
+    
+    <!-- <Input 
       label="Nome Completo *" 
       name="nome" 
       v-model.trim="nome" 
       :errors="v$.nome.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="CPF *" 
       vMaska 
       dataMaska="###.###.###-##" 
       v-model="cpf" 
       :errors="v$.cpf.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="Data de Nascimento"
       type="date"
       max="9999-12-31"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="País *" 
       v-model.trim="endereco.pais"
       :errors="v$.endereco.pais.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="CEP *" 
       dataMaska="#####-###" 
       v-model.trim="endereco.cep"
       :errors="v$.endereco.cep.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="Cidade *" 
       v-model.trim="endereco.cidade"
       :errors="v$.endereco.cidade.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="Estado *" 
       v-model="endereco.estado" 
       v-model.trim="endereco.estado" 
       :errors="v$.endereco.estado.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="Endereço *" 
       v-model.trim="endereco.logradouro" 
       :errors="v$.endereco.logradouro.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="Número *" 
       v-model.trim="endereco.numero" 
       :errors="v$.endereco.numero.$errors"
-    />
-    <Input 
+    /> -->
+    <!-- <Input 
       label="Bairro *" 
       v-model.trim="endereco.bairro" 
       :errors="v$.endereco.bairro.$errors"
-    />
+    /> -->
 
     <!-- <DynamicInput 
       msg="Cadastrar contato"
     /> -->
 
-    <Button
-      title="Salvar"
-    />
-  </form>
+    <q-btn class="teste" type="submit" label="Salvar" />
+
+  </q-form>
 </template>
 
 <script>
@@ -74,14 +131,14 @@ import api from '../services/api'
 import Button from './Button.vue'
 import DynamicInput from './DynamicInput.vue'
 import Input from './Input.vue'
-import useVuelidate from '@vuelidate/core'
-import { required, helpers } from '@vuelidate/validators'
+// import useVuelidate from '@vuelidate/core'
+// import { required, helpers } from '@vuelidate/validators'
 import { Notify } from 'quasar'
 
 export default {
-  setup () {
-    return { v$: useVuelidate() }
-  },
+  // setup () {
+  //   return { v$: useVuelidate() }
+  // },
   data() {
     return {
       id: "",
@@ -108,21 +165,21 @@ export default {
       }
     }
   },
-  validations () {
-    return {
-      nome: {required: helpers.withMessage('Este campo é obrigatório', required)},
-      cpf: {required: helpers.withMessage('Este campo é obrigatório', required)},
-      endereco: {
-        bairro: {required: helpers.withMessage('Este campo é obrigatório', required)},
-        cep: {required: helpers.withMessage('Este campo é obrigatório', required)},
-        cidade: {required: helpers.withMessage('Este campo é obrigatório', required)},
-        estado: {required: helpers.withMessage('Este campo é obrigatório', required)},
-        logradouro: {required: helpers.withMessage('Este campo é obrigatório', required)},
-        numero: {required: helpers.withMessage('Este campo é obrigatório', required)},
-        pais: {required: helpers.withMessage('Este campo é obrigatório', required)},
-      }
-    }
-  },
+  // validations () {
+  //   return {
+  //     nome: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //     cpf: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //     endereco: {
+  //       bairro: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //       cep: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //       cidade: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //       estado: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //       logradouro: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //       numero: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //       pais: {required: helpers.withMessage('Este campo é obrigatório', required)},
+  //     }
+  //   }
+  // },
   components: { Input, DynamicInput, Button },
   mounted() {
     if( this.person !== null ) {
@@ -225,6 +282,10 @@ export default {
 </script>
 
 <style scoped>
+  .teste{
+    background: #98bfdc; 
+    color: white;
+  }
   .form {
     max-width: 600px;
     display: flex;
@@ -235,5 +296,8 @@ export default {
     width: 4rem;
     height: 4rem;
     margin: 0.5rem 0px;
+  }
+  .form-input {
+    margin-bottom: 1rem;
   }
 </style>
