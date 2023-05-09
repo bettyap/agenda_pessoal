@@ -11,7 +11,7 @@
               <img class="avatar" :src="pessoa.foto" alt="">
             </template>
             <template v-else>
-              <img class="avatar" src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" alt="">
+              <img class="avatar" alt="">
             </template>
             
             <div class="card-info">
@@ -23,13 +23,22 @@
                 <span>{{pessoa.endereco.estado}}</span>
               </div>
               <div class="icons" @click="showContactModal(pessoa)">
-                <ph-plus :size="24" weight="bold" />
+                <q-icon name="add" size="1.5rem" />
                 <span>Contato</span>
               </div>
             </div>
             <div class="icons">
-              <ph-pencil :size="24" @click="mostrarPerson(pessoa)" />
-              <ph-trash :size="24" id="show-modal-confirmation"  @click="showConfirmationModal(pessoa)"/>
+              <q-icon 
+                name="edit"
+                size="1.5rem"
+                @click="mostrarPerson(pessoa)"
+              />
+              <q-icon 
+                name="delete"
+                size="1.5rem"
+                id="show-modal-confirmation"  
+                @click="showConfirmationModal(pessoa)"
+              />
             </div>
             
           </div>
@@ -274,10 +283,10 @@ export default {
     cursor: pointer;
     color: var(--blue-500);
   }
-  .icons svg {
+  .icons i {
     transition: transform .1s ease;
   }
-  .icons svg:hover {
+  .icons i:hover {
     color: var(--blue-300);
     transform: translateY(-3px);
   }
