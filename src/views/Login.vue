@@ -1,26 +1,49 @@
 <template>
   <div class="container">
     <div class="content">
-      <h1 class="title">Agenda Pessoal</h1>
-      <form class="form" @submit="login">
-        <label class="form_label">Email:</label>
-        <input class="form_input" v-model="username" placeholder="jhonny@example.com" />
-        <label class="form_label">Senha:</label>
-        <input class="form_input" type="password" v-model="password" placeholder="*****" />
+      <h2 class="title">Agenda Pessoal</h2>
+      <q-form class="form" @submit="login">
+        <q-input
+          outlined 
+          label="Username"
+          class="form_input"
+          v-model="username" 
+          placeholder="luiza"
+          :rules="[val => !!val || 'Username é obrigatório']"
+        />
+        <q-input
+          outlined 
+          label="Senha"
+          class="form_input"
+          v-model="password" 
+          placeholder="*****"
+          :type="isPwd ? 'password' : 'text'" 
+          :rules="[val => !!val || 'Senha é obrigatório']"
+        >
+          <template v-slot:append>
+            <q-icon
+              :name="isPwd ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="isPwd = !isPwd"
+            />
+        </template>
+        </q-input>
         <div class="form_remember">
           <input type="checkbox" name="teste" id="teste">
           <label for="teste">Lembrar de mim</label>
         </div>
-        <Button 
-          title="Entrar"
+        <q-btn 
+          label="Entrar"
           type="submit"
+          style="background: #98bfdc; color: white;"
         />
-      </form>
+      </q-form>
     </div>
   </div>
 </template>
 
 <script>
+import { Notify } from 'quasar';
 import { toast } from 'vue3-toastify';
 import Button from '../components/Button.vue'
 import api from '../services/api.js'
@@ -30,6 +53,7 @@ export default {
     return {
       username: this.username,
       password: this.password,
+      isPwd: true
     }
   },
   methods: {
@@ -53,9 +77,13 @@ export default {
         })
 
       }).catch((_error) => {
-        toast.error("Algo deu errado!", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        Notify.create({
+          message: 'Algo deu errado!',
+          color: 'negative',
+          position: 'top-right',
+          type: 'negative',
+          actions: [{ icon: 'close', color: 'white' }]
+        })
       }) 
     }
   }
