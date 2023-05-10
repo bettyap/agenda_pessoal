@@ -6,13 +6,14 @@
           <p>{{contato.contatoTipo.toLowerCase()}}</p>
           <p>{{contato.value}}</p>
           <p>Descrição: {{contato.descricao}}</p>
-          <button
+          <q-btn
+            outline
             type="button"
             class="dynamic-input-button"
             @click="editarContato(contato)"
           >
             Editar
-          </button>
+          </q-btn>
           <hr class="dynamic-input-row"/>
         </div>
         <div v-else>
@@ -33,22 +34,24 @@
         
         <div class="icons">
           <!-- <ph-heart v-if="contato.id" :size="24" color="#6da1d2" /> -->
-          <ph-heart :size="24" color="#6da1d2" @click="toggleFavorito(contato)"/>
-          <ph-trash :size="24" color="#6da1d2" @click="removerContato(contato,index)" />
+          <q-icon name="favorite_border" size="1.5rem" @click="toggleFavorito(contato)"/>
+          <q-icon name="delete_outline" size="1.5rem" @click="removerContato(contato,index)" />
         </div>
       </div>
       
-      <button
+      <q-btn
+        outline
         type="button"
         class="dynamic-input-button"
         @click="adicionarContato()"
       >
         Adicionar Mais
-      </button>
+      </q-btn>
     </div>
     <div class="modal-container-btn">
-      <Button 
-        title="Salvar"
+      <q-btn 
+        label="Salvar"
+        style="width:100%;background: #6da1d2; color: white"
         @click="cadastrarContato()"
       />
     </div>
@@ -281,15 +284,8 @@ export default {
     cursor: pointer;
   }
   .dynamic-input-button {
-    background: transparent;
-    border: 2px solid var(--blue-500);
-    padding: 0.5rem;
+    color: #6da1d2;
     border-radius: 0.75rem;
-    margin-top: 1rem;
-    cursor: pointer;
-  }
-  .dynamic-input-button:hover {
-    border: 2px solid var(--blue-300);
   }
   .icons {
     position: absolute;
@@ -298,5 +294,6 @@ export default {
     display: flex;
     gap: 0.25rem;
     cursor: pointer;
+    color: #6da1d2;
   }
 </style>

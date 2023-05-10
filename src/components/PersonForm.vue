@@ -1,5 +1,5 @@
 <template>
-  <q-form class="form" @submit="onSubmit">
+  <q-form class="form q-gutter-sm" @submit="onSubmit">
     <label>Adicionar foto</label>
     <img v-if="preview" :src="preview" alt="Preview" class="foto-preview">
     <input type="file" ref="fileInput" @change="previewImage" class="form-input"/>

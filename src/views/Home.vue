@@ -30,12 +30,12 @@
               </div>
               <div class="icons">
                 <q-icon 
-                  name="edit"
+                  name="mode_edit_outline"
                   size="1.5rem"
                   @click="mostrarPerson(pessoa)"
                 />
                 <q-icon 
-                  name="delete"
+                  name="delete_outline"
                   size="1.5rem"
                   id="show-modal-confirmation"  
                   @click="showConfirmationModal(pessoa)"

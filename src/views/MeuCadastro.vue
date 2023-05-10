@@ -7,7 +7,7 @@
         <div class="main_form">
           <h2>Minhas Informações</h2>
 
-          <q-form class="q-gutter-md" style="max-width: 25rem; margin-top: 1rem" @submit="atualizarCadastro">
+          <q-form class="q-gutter-sm" style="max-width: 25rem; margin-top: 1rem" @submit="atualizarCadastro">
             <q-input 
               outlined 
               v-model="nome" 
@@ -66,8 +66,8 @@
             />
             <!-- <label class="form_label">Username:</label> -->
             <!-- <input class="form_input" v-model="username" placeholder="admin" /> -->
-
-            <q-btn class="teste" type="submit" label="Salvar" />
+            
+            <q-btn class="btn" type="submit" label="Salvar" />
           
           </q-form>
         </div>
@@ -160,10 +160,6 @@ export default {
 </script>
 
 <style scoped>
-  .teste{
-    background: #98bfdc; 
-    color: white;
-  }
   .container {
     display: flex;
     flex-direction: column;
@@ -197,6 +193,11 @@ export default {
     padding: 0.5rem;
     margin-bottom: 1rem;
     font-size: 1rem;
+  }
+  .btn{
+    width: 100%;
+    background: #98bfdc; 
+    color: white;
   }
   @media(max-width: 880px){
     .content {
