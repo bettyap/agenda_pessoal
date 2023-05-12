@@ -18,17 +18,25 @@
         </div>
         <div v-else>
           <div class="dynamic-input-content__select">
-            <select name="" v-model="contato.contatoTipo" class="form_label">
-              <option value="0" class="form_label">Escolha o tipo de contato</option>
-              <option value="CELULAR" class="form_label">Celular</option>
-              <option value="EMAIL" class="form_label">Email</option>
-              <option value="TELEFONE" class="form_label">Telefone</option>
-            </select>
+            <q-select :options="opcoes" v-model="contato.contatoTipo" class="form_label" style="z-index:2" />
           </div>
           <div class="dynamic-input-content__input">
-            <Input v-if="contato.contatoTipo != 0" v-model="contato.value" :dataMaska="contatoMasks[contato.contatoTipo]" />
+            <!-- <Input v-if="contato.contatoTipo != 0" v-model="contato.value" :dataMaska="contatoMasks[contato.contatoTipo]" /> -->
+            <q-input 
+              v-if="contato.contatoTipo != 'Escolha o tipo de contato'" 
+              v-model="contato.value"
+              :mask="contatoMasks[contato.contatoTipo]"
+              outlined 
+            />
           </div>
-          <Input v-if="contato.contatoTipo != 0" v-model="contato.descricao" label="Descrição" placeholder="Ex: Casa, Principal, WhatsApp..."/>
+          <!-- <Input v-if="contato.contatoTipo != 0" v-model="contato.descricao" label="Descrição" placeholder="Ex: Casa, Principal, WhatsApp..."/> -->
+          <q-input
+            v-if="contato.contatoTipo != 'Escolha o tipo de contato'"
+            outlined 
+            v-model="contato.descricao" 
+            label="Descrição"
+            placeholder="Ex: Casa, Principal, WhatsApp..."
+          />
           <hr class="dynamic-input-row"/>
         </div>
         
@@ -83,7 +91,10 @@ export default {
         'CELULAR': '(##)#####-####',
         'EMAIL': '',
         'TELEFONE': '(##)####-####'
-      }
+      },
+      opcoes: [
+        'Escolha o tipo de contato', 'CELULAR', 'EMAIL', 'TELEFONE'
+      ]
     };
   },
   props: {
@@ -121,7 +132,7 @@ export default {
     adicionarContato() {
       this.contatos.push({
         isEditing: true,
-        contatoTipo: 0,
+        contatoTipo: 'Escolha o tipo de contato',
         value: '',
         descricao: '',
       });
