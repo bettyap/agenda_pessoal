@@ -200,10 +200,10 @@ export default {
     async onSubmit(event) {
       event.preventDefault()
 
-      this.v$.$touch(); 
-      if(this.v$.$invalid !== false) {
-        return 
-      }
+      // this.v$.$touch(); 
+      // if(this.v$.$invalid !== false) {
+      //   return 
+      // }
 
       let pessoa = await this.criarCadastroPessoa()
       
